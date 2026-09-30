@@ -1,0 +1,857 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LearnHub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --dark: #172554;
+            --light-bg: #f5f8ff;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: #263247;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            padding: 14px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .navbar-brand {
+            font-size: 25px;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .welcome {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(120deg, #0d6efd, #5145cd);
+            color: white;
+            padding: 42px;
+            border-radius: 20px;
+            box-shadow: 0 10px 28px rgba(13,110,253,0.16);
+        }
+
+        .welcome::after {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            right: -65px;
+            top: -95px;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-label {
+            display: inline-block;
+            background: rgba(255,255,255,0.16);
+            padding: 6px 13px;
+            border-radius: 30px;
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+
+        .welcome h1 {
+            font-size: clamp(27px, 4vw, 38px);
+        }
+
+        .welcome p {
+            color: rgba(255,255,255,0.88);
+        }
+
+        .welcome-btn {
+            background: white;
+            color: #0d6efd;
+            border: 0;
+            font-weight: 600;
+            padding: 11px 20px;
+            border-radius: 9px;
+        }
+
+        .welcome-btn:hover {
+            background: #eef4ff;
+            color: #084298;
+        }
+
+        .section-title {
+            font-size: 23px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .section-subtitle {
+            color: #748094;
+            font-size: 14px;
+        }
+
+        .stat-card, .content-card {
+            background: white;
+            border: 1px solid #edf0f6;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px rgba(23,37,84,0.045);
+        }
+
+        .stat-card {
+            padding: 23px;
+            height: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(23,37,84,0.09);
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .stat-icon {
+            width: 47px;
+            height: 47px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            background: #eef4ff;
+        }
+
+        .stat-label {
+            color: #758196;
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: 750;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+
+        .content-card {
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid #e9edf5;
+            border-radius: 14px;
+            padding: 20px;
+            height: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 9px 24px rgba(23,37,84,0.09);
+        }
+
+        .course-icon {
+            width: 58px;
+            height: 58px;
+            background: #eef4ff;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .course-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .course-meta {
+            color: #758196;
+            font-size: 13px;
+            min-height: 20px;
+        }
+
+        .progress {
+            height: 9px;
+            background: #eaf0fa;
+            border-radius: 20px;
+        }
+
+        .progress-bar {
+            border-radius: 20px;
+            background: linear-gradient(90deg, #0d6efd, #6254d9);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            border-radius: 9px;
+            font-weight: 600;
+            padding: 10px 16px;
+        }
+
+        .btn-outline-primary {
+            border-radius: 9px;
+            font-weight: 600;
+            padding: 9px 14px;
+        }
+
+        .progress-row {
+            padding: 17px 0;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .progress-row:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .progress-course-name {
+            font-weight: 650;
+            color: var(--dark);
+        }
+
+        .progress-percent {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 15px;
+            border: 1px solid #e9edf5;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            transition: background 0.2s, border-color 0.2s;
+            height: 100%;
+        }
+
+        .quick-action:hover {
+            background: #f5f8ff;
+            border-color: #b8d0ff;
+            color: var(--primary);
+        }
+
+        .quick-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            background: #eef4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .empty-state {
+            background: #f8faff;
+            border: 1px dashed #cbd8ef;
+            border-radius: 14px;
+            padding: 35px 15px;
+        }
+
+        footer {
+            margin-top: 55px;
+            background: #172554;
+        }
+
+        @media (max-width: 576px) {
+            .welcome {
+                padding: 28px 22px;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">
+            LearnHub
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="courses.html">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="dashboard.html">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-light btn-sm ms-lg-3 mt-2 mt-lg-0"
+                            onclick="logout()">
+                        Logout
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- MAIN -->
+<main class="container py-5">
+
+    <!-- WELCOME -->
+    <section class="welcome mb-4">
+        <div class="welcome-content">
+            <span class="welcome-label">🎓 Student Dashboard</span>
+
+            <h1 class="fw-bold mb-2">
+                Welcome, <span id="userName">Student</span>!
+            </h1>
+
+            <p class="lead mb-4">
+                Keep learning and make progress toward your goals.
+            </p>
+
+            <a href="courses.html" class="btn welcome-btn">
+                Explore Courses →
+            </a>
+        </div>
+    </section>
+
+
+    <!-- STATS -->
+    <section class="row g-3 mb-5">
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div>
+                        <p class="stat-label">Enrolled Courses</p>
+                        <div class="stat-number" id="courseCount">0</div>
+                    </div>
+                    <div class="stat-icon">📚</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div>
+                        <p class="stat-label">Completed Lessons</p>
+                        <div class="stat-number" id="completedCount">0</div>
+                    </div>
+                    <div class="stat-icon">✅</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div>
+                        <p class="stat-label">Overall Progress</p>
+                        <div class="stat-number" id="overallProgress">0%</div>
+                    </div>
+                    <div class="stat-icon">📈</div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ENROLLED COURSES -->
+    <section class="content-card">
+        <div class="d-flex flex-wrap justify-content-between
+                    align-items-center mb-4 gap-3">
+            <div>
+                <h2 class="section-title mb-1">My Enrolled Courses</h2>
+                <p class="section-subtitle mb-0">
+                    Pick up where you left off.
+                </p>
+            </div>
+
+            <a href="courses.html" class="btn btn-primary">
+                Browse Courses
+            </a>
+        </div>
+
+        <div class="row g-3" id="enrolledCourses"></div>
+
+        <div id="emptyMessage" class="empty-state text-center"
+             style="display:none;">
+            <div style="font-size:42px;">📘</div>
+            <h5 class="fw-bold mt-3">No courses yet</h5>
+            <p class="text-muted">
+                Browse our courses and start learning today.
+            </p>
+            <a href="courses.html" class="btn btn-primary">
+                Explore Courses
+            </a>
+        </div>
+    </section>
+
+
+    <!-- LEARNING PROGRESS -->
+    <section class="content-card">
+        <h2 class="section-title mb-1">My Learning Progress</h2>
+        <p class="section-subtitle mb-3">
+            Track your completed lessons in each course.
+        </p>
+
+        <div id="learningProgress"></div>
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+    <section class="content-card">
+        <h2 class="section-title mb-1">Quick Actions</h2>
+        <p class="section-subtitle mb-4">
+            Useful links to continue using LearnHub.
+        </p>
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <a href="courses.html" class="quick-action">
+                    <span class="quick-icon">🔎</span>
+                    <span>Explore Courses</span>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="profile.html" class="quick-action">
+                    <span class="quick-icon">👤</span>
+                    <span>My Profile</span>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="contact.html" class="quick-action">
+                    <span class="quick-icon">✉️</span>
+                    <span>Contact Us</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="text-white text-center py-4">
+    <p class="mb-0">
+        © 2026 LearnHub. All Rights Reserved.
+    </p>
+</footer>
+
+
+<script>
+// 1. GET CURRENT USER
+
+function getCurrentUser() {
+    try {
+        return JSON.parse(
+            localStorage.getItem("learnhubCurrentUser") || "null"
+        );
+    } catch (error) {
+        return null;
+    }
+}
+
+const currentUser = getCurrentUser();
+
+if (!currentUser || !currentUser.email) {
+    alert("Please login first.");
+    window.location.href = "login.html";
+}
+
+
+// 2. LOGOUT
+
+function logout() {
+    localStorage.removeItem("learnhubCurrentUser");
+    window.location.href = "login.html";
+}
+
+
+// 3. COURSE INFORMATION
+
+const courseInfo = {
+    web: {
+        name: "Web Development",
+        icon: "💻",
+        totalLessons: 5,
+        available: true,
+        link: "lesson.html?course=web&continue=1"
+    },
+
+    python: {
+        name: "Python Programming",
+        icon: "🐍",
+        totalLessons: 6,
+        available: true,
+        link: "lesson.html?course=python&continue=1"
+    },
+
+    database: {
+        name: "Database Fundamentals",
+        icon: "🗄️",
+        totalLessons: 5,
+        available: true,
+        link: "lesson.html?course=database&continue=1"
+    },
+
+    uiux: {
+        name: "UI/UX Design",
+        icon: "🎨",
+        totalLessons: 4,
+        available: true,
+        link: "lesson.html?course=uiux&continue=1"
+    },
+
+    data: {
+        name: "Data Analysis",
+        icon: "📊",
+        totalLessons: 5,
+        available: true,
+        link: "lesson.html?course=data&continue=1"
+    },
+
+    cyber: {
+        name: "Cybersecurity Basics",
+        icon: "🔐",
+        totalLessons: 4,
+        available: true,
+        link: "lesson.html?course=cyber&continue=1"
+    }
+};
+
+
+// 4. GET ENROLLMENTS
+
+function getEnrollments() {
+    try {
+        const data = JSON.parse(
+            localStorage.getItem("learnhubEnrolledCourses") || "[]"
+        );
+
+        return Array.isArray(data) ? data : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function getMyEnrollments() {
+    if (!currentUser || !currentUser.email) {
+        return [];
+    }
+
+    const all = getEnrollments();
+
+    return all.filter(function(item) {
+        return item.email &&
+            item.email.toLowerCase() ===
+            currentUser.email.toLowerCase();
+    });
+}
+
+
+// 5. GET COURSE PROGRESS
+
+function getProgress(courseId) {
+    const info = courseInfo[courseId];
+
+    if (!info || !info.available) {
+        return {
+            completed: 0,
+            total: info ? info.totalLessons : 0,
+            percent: 0,
+            available: false
+        };
+    }
+
+    const key =
+        "learnhubProgress_" +
+        encodeURIComponent(currentUser.email.toLowerCase()) +
+        "_" + courseId;
+
+    let completed = [];
+
+    try {
+        const saved = JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
+
+        if (Array.isArray(saved)) {
+            completed = saved;
+        }
+    } catch (error) {
+        completed = [];
+    }
+
+    const valid = [...new Set(completed)].filter(function(index) {
+        return Number.isInteger(index) &&
+            index >= 0 &&
+            index < info.totalLessons;
+    });
+
+    const count = valid.length;
+
+    return {
+        completed: count,
+        total: info.totalLessons,
+        percent: Math.round(
+            (count / info.totalLessons) * 100
+        ),
+        available: true
+    };
+}
+
+
+// 6. SHOW USER NAME
+
+if (currentUser) {
+    document.getElementById("userName").textContent =
+        currentUser.name || "Student";
+}
+
+
+// 7. DISPLAY ENROLLED COURSES
+
+function displayEnrolledCourses() {
+    const container =
+        document.getElementById("enrolledCourses");
+
+    const emptyMessage =
+        document.getElementById("emptyMessage");
+
+    const myCourses = getMyEnrollments();
+
+    container.innerHTML = "";
+
+    document.getElementById("courseCount").textContent =
+        myCourses.length;
+
+    if (myCourses.length === 0) {
+        emptyMessage.style.display = "block";
+        return;
+    }
+
+    emptyMessage.style.display = "none";
+
+    myCourses.forEach(function(enrollment) {
+        const info = courseInfo[enrollment.courseId];
+
+        const name = info
+            ? info.name
+            : (enrollment.courseName || "Course");
+
+        const icon = info ? info.icon : "📘";
+        const progress = getProgress(enrollment.courseId);
+
+        let progressText = "Lessons coming soon";
+        let progressBar = "";
+
+        if (progress.available) {
+            progressText =
+                progress.completed + " of " +
+                progress.total + " lessons completed";
+
+            progressBar = `
+                <div class="progress mt-2">
+                    <div class="progress-bar"
+                         role="progressbar"
+                         style="width:${progress.percent}%"
+                         aria-valuenow="${progress.percent}"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                    </div>
+                </div>
+                <div class="text-end small text-muted mt-1">
+                    ${progress.percent}% complete
+                </div>
+            `;
+        }
+
+        const link = info
+            ? info.link
+            : "courses.html";
+
+        const buttonText = progress.available
+            ? (progress.percent === 100
+                ? "Review Course"
+                : "Continue Learning")
+            : "View Course";
+
+        const col = document.createElement("div");
+        col.className = "col-md-6 col-lg-4";
+
+        const card = document.createElement("div");
+        card.className = "course-card";
+
+        card.innerHTML = `
+            <div class="course-icon">${icon}</div>
+
+            <h5 class="course-name">${name}</h5>
+
+            <p class="course-meta mb-3">
+                ${progressText}
+            </p>
+
+            ${progressBar}
+
+            <a href="${link}"
+               class="btn btn-outline-primary w-100 mt-3">
+                ${buttonText}
+            </a>
+        `;
+
+        col.appendChild(card);
+        container.appendChild(col);
+    });
+}
+
+
+// 8. DISPLAY LEARNING PROGRESS
+
+function displayLearningProgress() {
+    const container =
+        document.getElementById("learningProgress");
+
+    const myCourses = getMyEnrollments();
+
+    container.innerHTML = "";
+
+    let totalCompleted = 0;
+    let totalAvailableLessons = 0;
+
+    myCourses.forEach(function(enrollment) {
+        const info = courseInfo[enrollment.courseId];
+
+        if (!info || !info.available) {
+            return;
+        }
+
+        const progress = getProgress(enrollment.courseId);
+
+        totalCompleted += progress.completed;
+        totalAvailableLessons += progress.total;
+
+        const section = document.createElement("div");
+        section.className = "progress-row";
+
+        section.innerHTML = `
+            <div class="d-flex justify-content-between
+                        align-items-center flex-wrap gap-2">
+                <span class="progress-course-name">
+                    ${info.icon} ${info.name}
+                </span>
+                <span class="progress-percent">
+                    ${progress.percent}%
+                </span>
+            </div>
+
+            <div class="progress mt-2">
+                <div class="progress-bar"
+                     role="progressbar"
+                     style="width:${progress.percent}%"
+                     aria-valuenow="${progress.percent}"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+
+            <small class="text-muted d-block mt-2">
+                ${progress.completed} of ${progress.total}
+                lessons completed
+            </small>
+        `;
+
+        container.appendChild(section);
+    });
+
+    if (totalAvailableLessons === 0) {
+        container.innerHTML = `
+            <p class="text-muted mb-0">
+                Your course progress will appear here
+                when you enroll in a course.
+            </p>
+        `;
+    }
+
+    document.getElementById("completedCount").textContent =
+        totalCompleted;
+
+    let overall = 0;
+
+    if (totalAvailableLessons > 0) {
+        overall = Math.round(
+            (totalCompleted / totalAvailableLessons) * 100
+        );
+    }
+
+    document.getElementById("overallProgress").textContent =
+        overall + "%";
+}
+
+
+// 9. LOAD DASHBOARD
+
+if (currentUser && currentUser.email) {
+    displayEnrolledCourses();
+    displayLearningProgress();
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

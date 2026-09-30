@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - LearnHub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">LearnHub</a>
+
+            <div>
+                <a href="index.html" class="btn btn-outline-light me-2">Home</a>
+                <a href="register.html" class="btn btn-light">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Form -->
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="min-height: 85vh;">
+            <div class="col-md-6 col-lg-5">
+
+                <div class="card shadow border-0">
+                    <div class="card-body p-4 p-md-5">
+
+                        <h2 class="text-center fw-bold mb-2">Welcome Back!</h2>
+                        <p class="text-center text-muted mb-4">
+                            Login to continue learning
+                        </p>
+
+                        <div id="message"></div>
+
+                        <form id="loginForm">
+
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    placeholder="Enter your email"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    id="password"
+                                    placeholder="Enter your password"
+                                    required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 mt-2">
+                                Login
+                            </button>
+
+                        </form>
+
+                        <p class="text-center mt-4 mb-0">
+                            Don't have an account?
+                            <a href="register.html">Create Account</a>
+                        </p>
+
+                    </div>
+                </div>
+
+                <p class="text-center text-muted small mt-3">
+                    LearnHub - Online Learning Platform
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Login JavaScript -->
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const message = document.getElementById("message");
+
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value
+                .trim().toLowerCase();
+
+            const password = document.getElementById("password").value;
+
+            const users = JSON.parse(
+                localStorage.getItem("learnhubUsers") || "[]"
+            );
+
+            const user = users.find(function(item) {
+                return item.email === email &&
+                       item.password === password;
+            });
+
+            if (user) {
+                const currentUser = {
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                };
+
+                localStorage.setItem(
+                    "learnhubCurrentUser",
+                    JSON.stringify(currentUser)
+                );
+
+                alert("Login successful! Welcome to LearnHub.");
+
+                window.location.href = "dashboard.html";
+
+            } else {
+                message.innerHTML = `
+                    <div class="alert alert-danger">
+                        Invalid email or password. Please try again.
+                    </div>
+                `;
+            }
+        });
+    </script>
+
+</body>
+</html>

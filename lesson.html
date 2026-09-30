@@ -1,0 +1,1085 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LearnHub - Lessons</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+  <style>
+    body {
+      background: #f4f7fb;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background: #0d6efd;
+    }
+
+    .lesson-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+    }
+
+    .lesson-sidebar, .lesson-content, .progress-card {
+      background: white;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.07);
+    }
+
+    .lesson-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 12px;
+      margin: 7px 0;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      color: #333;
+    }
+
+    .lesson-item.active {
+      background: #eaf2ff;
+      border-color: #0d6efd;
+      color: #084298;
+      font-weight: bold;
+    }
+
+    .lesson-item.completed {
+      border-color: #198754;
+    }
+
+    .lesson-text {
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .lesson-text h3 {
+      margin-top: 22px;
+      font-size: 21px;
+    }
+
+    .lesson-text li {
+      margin-bottom: 8px;
+    }
+
+    .code-example {
+      background: #212529;
+      color: #f8f9fa;
+      padding: 16px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      font-family: Consolas, monospace;
+    }
+
+    .progress {
+      height: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .lesson-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="index.html">LearnHub</a>
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="courses.html">Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="profile.html">Profile</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-4">
+  <div class="mb-4">
+    <a href="dashboard.html" class="text-decoration-none">
+      ← Back to Dashboard
+    </a>
+    <h1 class="fw-bold mt-3" id="courseName">Course Lessons</h1>
+    <p class="text-muted" id="courseDescription">
+      Learn step by step with LearnHub.
+    </p>
+  </div>
+
+  <div class="progress-card mb-4">
+    <div class="d-flex justify-content-between mb-2">
+      <strong>Course Progress</strong>
+      <strong id="progressText">0%</strong>
+    </div>
+    <div class="progress">
+      <div id="progressBar"
+           class="progress-bar bg-success"
+           role="progressbar" style="width: 0%">
+      </div>
+    </div>
+    <small class="text-muted mt-2 d-block" id="lessonCount">
+      0 of 0 lessons completed
+    </small>
+  </div>
+
+  <div id="message" class="alert d-none"></div>
+
+  <div class="lesson-layout">
+    <aside class="lesson-sidebar">
+      <h5 class="fw-bold mb-3">Lessons</h5>
+      <div id="lessonList"></div>
+    </aside>
+
+    <section class="lesson-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="badge text-bg-primary" id="lessonNumber">
+          Lesson 1
+        </span>
+        <span class="text-muted small" id="completionStatus">
+          Not completed
+        </span>
+      </div>
+
+      <h2 class="fw-bold mb-3" id="lessonTitle">Lesson Title</h2>
+
+      <div class="lesson-text" id="lessonBody"></div>
+
+      <hr class="my-4">
+
+      <div class="d-flex flex-wrap gap-2 justify-content-between">
+        <button class="btn btn-outline-secondary"
+                id="previousBtn" onclick="previousLesson()">
+          Previous
+        </button>
+
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-success"
+                  id="completeBtn" onclick="completeLesson()">
+            Mark as Complete
+          </button>
+          <button class="btn btn-primary"
+                  id="nextBtn" onclick="nextLesson()">
+            Next Lesson →
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+
+// ====================================
+// 1. COURSE INFORMATION AND LESSONS
+// ====================================
+
+const courseData = {
+
+  // --------------------------------
+  // WEB DEVELOPMENT
+  // --------------------------------
+
+  web: {
+    name: "Web Development",
+    description: "Learn how to create websites using HTML, CSS and Bootstrap.",
+    lessons: [
+      {
+        title: "Introduction to Web Development",
+        content: `
+          <p>Welcome to Web Development! In this course, you will learn
+          how websites are created and how they work.</p>
+          <h3>What is Web Development?</h3>
+          <p>Web development is the process of creating and maintaining
+          websites and web applications.</p>
+          <h3>Main technologies</h3>
+          <ul>
+            <li><b>HTML:</b> Creates the structure of a webpage.</li>
+            <li><b>CSS:</b> Controls the design and appearance.</li>
+            <li><b>JavaScript:</b> Adds interactivity.</li>
+            <li><b>Bootstrap:</b> Helps build responsive layouts.</li>
+          </ul>
+        `
+      },
+      {
+        title: "HTML Basics",
+        content: `
+          <p>HTML stands for HyperText Markup Language. It is used
+          to structure content on a webpage.</p>
+          <h3>Basic HTML structure</h3>
+          <div class="code-example">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello World&lt;/h1&gt;
+  &lt;p&gt;This is my webpage.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+          <h3>Common HTML tags</h3>
+          <ul>
+            <li><code>&lt;h1&gt;</code> - Main heading</li>
+            <li><code>&lt;p&gt;</code> - Paragraph</li>
+            <li><code>&lt;a&gt;</code> - Link</li>
+            <li><code>&lt;img&gt;</code> - Image</li>
+          </ul>
+        `
+      },
+      {
+        title: "CSS Styling",
+        content: `
+          <p>CSS stands for Cascading Style Sheets. It makes webpages
+          attractive by controlling colors, spacing and layout.</p>
+          <h3>Example</h3>
+          <div class="code-example">h1 {
+  color: blue;
+  font-size: 32px;
+}
+
+p {
+  color: gray;
+}</div>
+          <h3>CSS can control</h3>
+          <ul>
+            <li>Text color and size</li>
+            <li>Background colors</li>
+            <li>Margins and padding</li>
+            <li>Borders and page layout</li>
+          </ul>
+        `
+      },
+      {
+        title: "Bootstrap",
+        content: `
+          <p>Bootstrap is a frontend framework that helps developers
+          create responsive websites using ready-made classes.</p>
+          <h3>Example Bootstrap button</h3>
+          <div class="code-example">&lt;button class="btn btn-primary"&gt;
+  Click Me
+&lt;/button&gt;</div>
+          <h3>Useful Bootstrap classes</h3>
+          <ul>
+            <li><code>container</code> - Page content area</li>
+            <li><code>row</code> and <code>col</code> - Grid layout</li>
+            <li><code>btn btn-primary</code> - Primary button</li>
+            <li><code>navbar</code> - Navigation bar</li>
+          </ul>
+        `
+      },
+      {
+        title: "Responsive Web Design",
+        content: `
+          <p>Responsive web design makes a website work on different
+          screen sizes, including phones, tablets and computers.</p>
+          <h3>Why is it important?</h3>
+          <ul>
+            <li>Users can access the site on mobile devices.</li>
+            <li>Content adjusts to different screen sizes.</li>
+            <li>Navigation becomes easier on small screens.</li>
+          </ul>
+          <h3>Example</h3>
+          <div class="code-example">@media (max-width: 600px) {
+  h1 {
+    font-size: 24px;
+  }
+}</div>
+        `
+      }
+    ]
+  },
+
+  // --------------------------------
+  // PYTHON PROGRAMMING
+  // --------------------------------
+
+  python: {
+    name: "Python Programming",
+    description: "Learn Python programming from the basics.",
+    lessons: [
+      {
+        title: "Introduction to Python",
+        content: `
+          <p>Python is a programming language used in web development,
+          automation, data analysis and artificial intelligence.</p>
+          <h3>Why learn Python?</h3>
+          <ul>
+            <li>Simple and readable syntax</li>
+            <li>Useful for many types of projects</li>
+            <li>Large community and many libraries</li>
+          </ul>
+          <h3>First Python program</h3>
+          <div class="code-example">print("Hello, World!")</div>
+        `
+      },
+      {
+        title: "Variables and Data Types",
+        content: `
+          <p>Variables store information that a program can use.</p>
+          <h3>Example</h3>
+          <div class="code-example">name = "Thakshila"
+age = 20
+price = 150.50
+is_student = True</div>
+          <h3>Common data types</h3>
+          <ul>
+            <li>String: text</li>
+            <li>Integer: whole numbers</li>
+            <li>Float: decimal numbers</li>
+            <li>Boolean: True or False</li>
+          </ul>
+        `
+      },
+      {
+        title: "Input and Output",
+        content: `
+          <p>Input allows a user to enter information. Output displays
+          information from the program.</p>
+          <h3>Example</h3>
+          <div class="code-example">name = input("Enter your name: ")
+print("Hello", name)</div>
+          <p>The <code>input()</code> function reads user input.
+          The <code>print()</code> function displays output.</p>
+        `
+      },
+      {
+        title: "If and Else Conditions",
+        content: `
+          <p>Conditions allow a program to make decisions.</p>
+          <h3>Example</h3>
+          <div class="code-example">age = 18
+
+if age >= 18:
+    print("Adult")
+else:
+    print("Not an adult")</div>
+          <p>Python uses indentation to show which statements belong
+          to a condition.</p>
+        `
+      },
+      {
+        title: "Loops in Python",
+        content: `
+          <p>Loops repeat a block of code multiple times.</p>
+          <h3>For loop</h3>
+          <div class="code-example">for i in range(5):
+    print(i)</div>
+          <h3>While loop</h3>
+          <div class="code-example">count = 1
+
+while count <= 5:
+    print(count)
+    count += 1</div>
+        `
+      },
+      {
+        title: "Simple Python Program",
+        content: `
+          <p>Now let's combine variables, input and calculations
+          in a small program.</p>
+          <h3>Example: Add two numbers</h3>
+          <div class="code-example">first = int(input("First number: "))
+second = int(input("Second number: "))
+
+total = first + second
+
+print("Total:", total)</div>
+          <p>This program reads two numbers, adds them and displays
+          the total.</p>
+        `
+      }
+    ]
+  },
+
+  // --------------------------------
+  // DATABASE FUNDAMENTALS
+  // --------------------------------
+
+  database: {
+    name: "Database Fundamentals",
+    description: "Understand databases, tables and SQL basics.",
+    lessons: [
+      {
+        title: "Introduction to Databases",
+        content: `
+          <p>A database is an organized collection of information
+          that can be stored, managed and retrieved.</p>
+          <h3>Why use databases?</h3>
+          <ul>
+            <li>Store information in an organized way.</li>
+            <li>Search and retrieve data.</li>
+            <li>Update records when information changes.</li>
+            <li>Manage large amounts of information.</li>
+          </ul>
+          <p>Examples include student records, online shops and
+          library systems.</p>
+        `
+      },
+      {
+        title: "Tables, Rows and Columns",
+        content: `
+          <p>Relational databases organize data using tables.</p>
+          <ul>
+            <li><b>Table:</b> A collection of related records.</li>
+            <li><b>Row:</b> One record in a table.</li>
+            <li><b>Column:</b> A field describing the data.</li>
+          </ul>
+          <h3>Example: Students table</h3>
+          <table class="table table-bordered">
+            <tr><th>StudentID</th><th>Name</th><th>Age</th></tr>
+            <tr><td>1</td><td>Nimal</td><td>20</td></tr>
+            <tr><td>2</td><td>Amali</td><td>21</td></tr>
+          </table>
+        `
+      },
+      {
+        title: "Introduction to SQL",
+        content: `
+          <p>SQL means Structured Query Language. It is used to
+          communicate with relational databases.</p>
+          <h3>Example</h3>
+          <div class="code-example">SELECT * FROM Students;</div>
+          <p>This query selects all columns and records from the
+          Students table.</p>
+          <h3>Other SQL commands</h3>
+          <ul>
+            <li><code>SELECT</code> - Read data</li>
+            <li><code>INSERT</code> - Add data</li>
+            <li><code>UPDATE</code> - Change data</li>
+            <li><code>DELETE</code> - Remove data</li>
+          </ul>
+        `
+      },
+      {
+        title: "Primary Keys and Relationships",
+        content: `
+          <p>A primary key uniquely identifies each row in a table.</p>
+          <p>A foreign key connects a record in one table to a record
+          in another table.</p>
+          <h3>Example</h3>
+          <p>A Students table can have StudentID as its primary key.
+          An Enrollments table can use StudentID as a foreign key
+          to connect enrollments with students.</p>
+        `
+      },
+      {
+        title: "Basic SQL Queries",
+        content: `
+          <p>SQL queries help retrieve and manage database information.</p>
+          <h3>Examples</h3>
+          <div class="code-example">SELECT name FROM Students;
+
+SELECT * FROM Students
+WHERE age >= 20;
+
+INSERT INTO Students (name, age)
+VALUES ('Kamal', 22);</div>
+          <p>The WHERE clause filters records based on a condition.</p>
+        `
+      }
+    ]
+  },
+
+  // --------------------------------
+  // UI/UX DESIGN
+  // --------------------------------
+
+  uiux: {
+    name: "UI/UX Design",
+    description: "Learn the basics of user interface and user experience design.",
+    lessons: [
+      {
+        title: "Introduction to UI and UX",
+        content: `
+          <p>UI means User Interface. UX means User Experience.
+          They are related but describe different parts of product design.</p>
+          <ul>
+            <li><b>UI:</b> Visual elements such as buttons, colors and menus.</li>
+            <li><b>UX:</b> How people use a product and how easy it is to use.</li>
+          </ul>
+          <p>Both help designers create useful digital products.</p>
+        `
+      },
+      {
+        title: "Understanding Users",
+        content: `
+          <p>Designers need to understand the people who will use
+          the product.</p>
+          <h3>Ways to learn about users</h3>
+          <ul>
+            <li>Interviews</li>
+            <li>Surveys</li>
+            <li>Observation</li>
+            <li>Usability testing</li>
+          </ul>
+          <p>User research can reveal needs, goals and difficulties.</p>
+        `
+      },
+      {
+        title: "Wireframes and Layout",
+        content: `
+          <p>A wireframe is a simple plan of a screen. It shows where
+          important elements will be placed before detailed styling.</p>
+          <h3>Common elements</h3>
+          <ul>
+            <li>Header and navigation</li>
+            <li>Main content area</li>
+            <li>Buttons and forms</li>
+            <li>Footer</li>
+          </ul>
+          <p>Wireframes help teams discuss structure early.</p>
+        `
+      },
+      {
+        title: "Colors, Typography and Usability",
+        content: `
+          <p>Visual design helps people understand and use an interface.</p>
+          <ul>
+            <li>Use readable font sizes.</li>
+            <li>Keep enough contrast between text and background.</li>
+            <li>Use consistent colors and spacing.</li>
+            <li>Make buttons and links easy to recognize.</li>
+          </ul>
+          <p>Usability testing helps identify areas that users find
+          confusing or difficult.</p>
+        `
+      }
+    ]
+  },
+
+  // --------------------------------
+  // DATA ANALYSIS
+  // --------------------------------
+
+  data: {
+    name: "Data Analysis",
+    description: "Learn how data can be organized, explored and understood.",
+    lessons: [
+      {
+        title: "Introduction to Data Analysis",
+        content: `
+          <p>Data analysis is the process of examining data to find
+          useful information and patterns.</p>
+          <h3>Examples of data</h3>
+          <ul>
+            <li>Student exam marks</li>
+            <li>Shop sales</li>
+            <li>Weather measurements</li>
+            <li>Website visits</li>
+          </ul>
+          <p>Analysis can help people understand what has happened
+          and support informed decisions.</p>
+        `
+      },
+      {
+        title: "Types of Data",
+        content: `
+          <p>Data can be described in different ways.</p>
+          <ul>
+            <li><b>Numerical:</b> Values such as age or price.</li>
+            <li><b>Categorical:</b> Groups such as department or color.</li>
+            <li><b>Structured:</b> Organized in rows and columns.</li>
+            <li><b>Unstructured:</b> Text, images or audio without
+            a simple table structure.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Collecting and Cleaning Data",
+        content: `
+          <p>Data may come from surveys, forms, databases or files.</p>
+          <h3>Data cleaning</h3>
+          <p>Cleaning prepares data for analysis.</p>
+          <ul>
+            <li>Find missing values.</li>
+            <li>Correct inconsistent formats.</li>
+            <li>Remove duplicate records when appropriate.</li>
+            <li>Check for errors.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Understanding Data with Statistics",
+        content: `
+          <p>Basic statistics can summarize a dataset.</p>
+          <ul>
+            <li><b>Mean:</b> Sum of values divided by the number of values.</li>
+            <li><b>Median:</b> The middle value after sorting.</li>
+            <li><b>Mode:</b> The most frequent value.</li>
+            <li><b>Range:</b> Maximum minus minimum.</li>
+          </ul>
+          <p>These measures describe different aspects of a dataset.</p>
+        `
+      },
+      {
+        title: "Charts and Data Visualization",
+        content: `
+          <p>Charts help communicate patterns and comparisons.</p>
+          <ul>
+            <li><b>Bar chart:</b> Compare categories.</li>
+            <li><b>Line chart:</b> Show changes over time.</li>
+            <li><b>Pie chart:</b> Show parts of a whole when categories
+            are limited.</li>
+          </ul>
+          <p>Choose a chart that matches the question and label it clearly.</p>
+        `
+      }
+    ]
+  },
+
+  // --------------------------------
+  // CYBERSECURITY BASICS
+  // --------------------------------
+
+  cyber: {
+    name: "Cybersecurity Basics",
+    description: "Learn basic concepts for protecting systems and information.",
+    lessons: [
+      {
+        title: "Introduction to Cybersecurity",
+        content: `
+          <p>Cybersecurity is the practice of protecting computers,
+          networks, systems and information from digital threats.</p>
+          <h3>Common goals</h3>
+          <ul>
+            <li>Confidentiality: Information is accessible only to
+            authorized people.</li>
+            <li>Integrity: Information remains accurate and reliable.</li>
+            <li>Availability: Systems and information are accessible
+            when needed.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Passwords and Account Security",
+        content: `
+          <p>Passwords help protect accounts from unauthorized access.</p>
+          <ul>
+            <li>Use long, unique passwords.</li>
+            <li>Do not reuse the same password everywhere.</li>
+            <li>Use a password manager if available.</li>
+            <li>Enable multi-factor authentication when possible.</li>
+            <li>Never share verification codes with others.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Phishing and Online Scams",
+        content: `
+          <p>Phishing is a type of scam that tries to trick people
+          into sharing information or opening harmful links.</p>
+          <h3>Warning signs</h3>
+          <ul>
+            <li>Unexpected messages asking for passwords.</li>
+            <li>Links to unfamiliar websites.</li>
+            <li>Urgent requests for personal or financial details.</li>
+            <li>Unexpected attachments.</li>
+          </ul>
+          <p>Check the sender and website carefully before taking action.</p>
+        `
+      },
+      {
+        title: "Safe Browsing and Device Protection",
+        content: `
+          <p>Safe browsing habits can reduce common online risks.</p>
+          <ul>
+            <li>Keep your operating system and apps updated.</li>
+            <li>Download software from trusted sources.</li>
+            <li>Use secure network connections.</li>
+            <li>Back up important files.</li>
+            <li>Review app permissions and account activity.</li>
+          </ul>
+        `
+      }
+    ]
+  }
+};
+
+
+// ====================================
+// 2. GET COURSE AND USER
+// ====================================
+
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("course") || "web";
+const course = courseData[courseId];
+
+function getCurrentUser() {
+  try {
+    return JSON.parse(
+      localStorage.getItem("learnhubCurrentUser") || "null"
+    );
+  } catch (error) {
+    return null;
+  }
+}
+
+const currentUser = getCurrentUser();
+
+const userEmail = currentUser && currentUser.email
+  ? currentUser.email.toLowerCase()
+  : "";
+
+
+// ====================================
+// 3. GET ENROLLMENT
+// ====================================
+
+function getAllEnrollments() {
+  try {
+    const data = JSON.parse(
+      localStorage.getItem("learnhubEnrolledCourses") || "[]"
+    );
+
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+const allEnrollments = getAllEnrollments();
+
+const enrolled = allEnrollments.some(item =>
+  item.email &&
+  item.email.toLowerCase() === userEmail &&
+  item.courseId === courseId
+);
+
+
+// ====================================
+// 4. PROGRESS SETTINGS
+// ====================================
+
+const progressKey = "learnhubProgress_" +
+  encodeURIComponent(userEmail) + "_" + courseId;
+
+let completedLessons = [];
+let currentLesson = 0;
+
+
+// Load progress safely
+function loadProgress() {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(progressKey) || "[]"
+    );
+
+    return Array.isArray(saved) ? saved : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+
+// Remove invalid or duplicate lesson indexes
+function cleanProgress() {
+  const total = course.lessons.length;
+
+  completedLessons = [...new Set(completedLessons)].filter(index =>
+    Number.isInteger(index) &&
+    index >= 0 &&
+    index < total
+  );
+
+  completedLessons.sort((a, b) => a - b);
+}
+
+
+// Find next lesson not completed yet
+function findNextIncompleteLesson() {
+  for (let i = 0; i < course.lessons.length; i++) {
+    if (!completedLessons.includes(i)) {
+      return i;
+    }
+  }
+
+  // If all lessons are complete, show the last lesson
+  return course.lessons.length - 1;
+}
+
+
+// Save progress
+function saveProgress() {
+  localStorage.setItem(
+    progressKey,
+    JSON.stringify(completedLessons)
+  );
+}
+
+
+// ====================================
+// 5. MESSAGE
+// ====================================
+
+function showMessage(message, type = "danger") {
+  const box = document.getElementById("message");
+
+  box.className = "alert alert-" + type;
+  box.textContent = message;
+  box.classList.remove("d-none");
+}
+
+
+// ====================================
+// 6. UPDATE COURSE PROGRESS
+// ====================================
+
+function updateProgress() {
+  const total = course.lessons.length;
+  const completed = completedLessons.length;
+
+  const percentage = Math.round(
+    (completed / total) * 100
+  );
+
+  document.getElementById("progressText").textContent =
+    percentage + "%";
+
+  document.getElementById("progressBar").style.width =
+    percentage + "%";
+
+  document.getElementById("lessonCount").textContent =
+    completed + " of " + total + " lessons completed";
+}
+
+
+// ====================================
+// 7. DISPLAY LESSON LIST
+// ====================================
+
+function renderLessonList() {
+  const list = document.getElementById("lessonList");
+  list.innerHTML = "";
+
+  course.lessons.forEach((lesson, index) => {
+    const button = document.createElement("button");
+    button.className = "lesson-item";
+
+    if (index === currentLesson) {
+      button.classList.add("active");
+    }
+
+    if (completedLessons.includes(index)) {
+      button.classList.add("completed");
+    }
+
+    const status =
+      completedLessons.includes(index) ? " ✓" : "";
+
+    button.textContent =
+      (index + 1) + ". " + lesson.title + status;
+
+    button.onclick = function() {
+      currentLesson = index;
+      renderLesson();
+    };
+
+    list.appendChild(button);
+  });
+}
+
+
+// ====================================
+// 8. DISPLAY CURRENT LESSON
+// ====================================
+
+function renderLesson() {
+  const lesson = course.lessons[currentLesson];
+
+  document.getElementById("lessonNumber").textContent =
+    "Lesson " + (currentLesson + 1) +
+    " of " + course.lessons.length;
+
+  document.getElementById("lessonTitle").textContent =
+    lesson.title;
+
+  document.getElementById("lessonBody").innerHTML =
+    lesson.content;
+
+  const isCompleted =
+    completedLessons.includes(currentLesson);
+
+  document.getElementById("completionStatus").textContent =
+    isCompleted ? "Completed ✓" : "Not completed";
+
+  const completeBtn =
+    document.getElementById("completeBtn");
+
+  completeBtn.textContent = isCompleted
+    ? "Completed ✓"
+    : "Mark as Complete";
+
+  completeBtn.disabled = isCompleted;
+
+  document.getElementById("previousBtn").disabled =
+    currentLesson === 0;
+
+  document.getElementById("nextBtn").textContent =
+    currentLesson === course.lessons.length - 1
+      ? "Finish Course"
+      : "Next Lesson →";
+
+  renderLessonList();
+  updateProgress();
+}
+
+
+// ====================================
+// 9. MARK LESSON AS COMPLETE
+// ====================================
+
+function completeLesson() {
+  if (!completedLessons.includes(currentLesson)) {
+    completedLessons.push(currentLesson);
+
+    cleanProgress();
+    saveProgress();
+  }
+
+  renderLesson();
+
+  if (completedLessons.length === course.lessons.length) {
+    showMessage(
+      "Congratulations! You completed this course.",
+      "success"
+    );
+  } else {
+    showMessage(
+      "Lesson completed! Your progress has been saved.",
+      "success"
+    );
+  }
+}
+
+
+// ====================================
+// 10. NEXT LESSON
+// ====================================
+
+function nextLesson() {
+  if (currentLesson < course.lessons.length - 1) {
+    currentLesson++;
+    renderLesson();
+  } else if (
+    completedLessons.length === course.lessons.length
+  ) {
+    showMessage(
+      "You have completed all lessons in this course!",
+      "success"
+    );
+  } else {
+    showMessage(
+      "Complete the remaining lessons to finish the course.",
+      "warning"
+    );
+  }
+}
+
+
+// ====================================
+// 11. PREVIOUS LESSON
+// ====================================
+
+function previousLesson() {
+  if (currentLesson > 0) {
+    currentLesson--;
+    renderLesson();
+  }
+}
+
+
+// ====================================
+// 12. INITIALIZE PAGE
+// ====================================
+
+function initializePage() {
+
+  // Check login
+  if (!currentUser || !userEmail) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Check course ID
+  if (!course) {
+    document.getElementById("courseName").textContent =
+      "Course Not Found";
+
+    showMessage(
+      "This course could not be found. Please return to Courses."
+    );
+    return;
+  }
+
+  // Check enrollment
+  if (!enrolled) {
+    document.getElementById("courseName").textContent =
+      "Enrollment Required";
+
+    showMessage(
+      "Please enroll in this course before starting lessons."
+    );
+
+    const link = document.createElement("a");
+    link.href = "courses.html";
+    link.className = "btn btn-primary";
+    link.textContent = "Browse Courses";
+
+    document.getElementById("message").appendChild(
+      document.createElement("br")
+    );
+
+    document.getElementById("message").appendChild(link);
+    return;
+  }
+
+  // Show course details
+  document.getElementById("courseName").textContent =
+    course.name;
+
+  document.getElementById("courseDescription").textContent =
+    course.description;
+
+  // Load and clean saved progress
+  completedLessons = loadProgress();
+  cleanProgress();
+  saveProgress();
+
+  // Open first incomplete lesson automatically
+  currentLesson = findNextIncompleteLesson();
+
+  renderLesson();
+}
+
+initializePage();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

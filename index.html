@@ -1,0 +1,901 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnHub - Online Learning Platform</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #18304b;
+      background: #f4f7fb;
+    }
+
+    .navbar {
+      background: #102c4b;
+      min-height: 58px;
+    }
+
+    .navbar-brand {
+      color: white !important;
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+
+    .brand-icon {
+      font-size: 27px;
+      margin-right: 7px;
+    }
+
+    .navbar .nav-link {
+      color: #e6edf6;
+      font-size: 14px;
+      margin: 0 8px;
+    }
+
+    .navbar .nav-link:hover {
+      color: #fff;
+    }
+
+    .nav-buttons .btn {
+      font-size: 13px;
+      padding: 7px 18px;
+      border-radius: 4px;
+    }
+
+    .hero {
+      background: #edf4fc;
+      padding: 36px 0 20px;
+      border-bottom: 1px solid #dfe7f0;
+    }
+
+    .hero h1 {
+      font-size: clamp(25px, 3vw, 38px);
+      font-weight: 700;
+      line-height: 1.2;
+      color: #173451;
+    }
+
+    .hero p {
+      color: #51677e;
+      font-size: 15px;
+      margin: 10px 0 18px;
+    }
+
+    .search-box {
+      display: flex;
+      max-width: 500px;
+      background: white;
+      border: 1px solid #d4deea;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(20,40,70,.06);
+    }
+
+    .search-box input {
+      border: 0;
+      outline: none;
+      padding: 13px 15px;
+      flex: 1;
+      min-width: 0;
+      font-size: 13px;
+    }
+
+    .search-box button {
+      border: 0;
+      background: #2464b5;
+      color: white;
+      padding: 0 22px;
+      font-weight: 600;
+    }
+
+    .hero-art {
+      min-height: 205px;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .art-circle {
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background: #d9e8fb;
+      right: 10%;
+      top: -12px;
+    }
+
+    .art-board {
+      position: absolute;
+      width: 78%;
+      height: 65px;
+      bottom: 8px;
+      left: 12%;
+      background: #183e60;
+      border-radius: 4px;
+      box-shadow: 0 7px 0 #b6c7d6;
+    }
+
+    .art-laptop {
+      position: absolute;
+      width: 160px;
+      height: 100px;
+      left: 12%;
+      bottom: 42px;
+      background: #254d6e;
+      border: 7px solid #16344e;
+      border-radius: 8px 8px 3px 3px;
+      transform: skewY(4deg);
+    }
+
+    .art-laptop:after {
+      content: "";
+      position: absolute;
+      height: 8px;
+      width: 180px;
+      left: -17px;
+      bottom: -15px;
+      background: #aabac8;
+      border-radius: 2px;
+    }
+
+    .art-person {
+      position: absolute;
+      width: 100px;
+      height: 115px;
+      right: 23%;
+      bottom: 38px;
+    }
+
+    .person-head {
+      position: absolute;
+      width: 54px;
+      height: 62px;
+      border-radius: 45% 45% 48% 48%;
+      background: #f1c49f;
+      border: 3px solid #173b5a;
+      top: 0;
+      left: 24px;
+      z-index: 2;
+    }
+
+    .person-hair {
+      position: absolute;
+      width: 68px;
+      height: 60px;
+      border-radius: 50% 50% 35% 35%;
+      background: #18334b;
+      top: -7px;
+      left: 17px;
+      z-index: 1;
+    }
+
+    .person-body {
+      position: absolute;
+      width: 90px;
+      height: 62px;
+      background: #e87563;
+      border: 3px solid #173b5a;
+      border-radius: 35px 35px 4px 4px;
+      bottom: 0;
+      left: 5px;
+    }
+
+    .person-body:after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 42px;
+      background: #fff;
+      top: 0;
+      left: 27px;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .float-card {
+      position: absolute;
+      background: white;
+      border-radius: 8px;
+      padding: 9px 12px;
+      box-shadow: 0 3px 12px rgba(20,40,70,.12);
+      color: #2363a9;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .float-one { top: 22px; left: 12%; }
+    .float-two { top: 45px; right: 5%; }
+    .float-three { bottom: 55px; right: 3%; }
+
+    .stats {
+      background: #fff;
+      border-bottom: 1px solid #e3e9f0;
+      padding: 13px 0;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-right: 1px solid #e2e8ef;
+      min-height: 48px;
+    }
+
+    .stat:last-child { border-right: 0; }
+
+    .stat-icon {
+      font-size: 26px;
+      color: #1b609f;
+    }
+
+    .stat strong {
+      font-size: 20px;
+      display: block;
+      line-height: 1.1;
+    }
+
+    .stat small {
+      color: #617286;
+      font-size: 11px;
+    }
+
+    .section {
+      padding: 24px 0;
+    }
+
+    .section-heading {
+      font-size: 20px;
+      font-weight: 700;
+      border-bottom: 2px solid #d7e0ea;
+      padding-bottom: 8px;
+      margin-bottom: 17px;
+    }
+
+    .view-all {
+      color: #3269a5;
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .course-card {
+      background: white;
+      border: 1px solid #dfe6ee;
+      border-radius: 5px;
+      overflow: hidden;
+      height: 100%;
+      box-shadow: 0 2px 5px rgba(20,40,70,.05);
+      transition: .2s;
+    }
+
+    .course-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(20,40,70,.12);
+    }
+
+    .course-img {
+      width: 100%;
+      height: 105px;
+      object-fit: cover;
+      background: #dce8f4;
+    }
+
+    .course-body {
+      padding: 10px 11px;
+    }
+
+    .course-body h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0 0 5px;
+    }
+
+    .course-body p {
+      color: #65768a;
+      font-size: 11px;
+      margin: 0 0 8px;
+      min-height: 28px;
+    }
+
+    .course-meta {
+      border-top: 1px solid #edf0f4;
+      padding-top: 7px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #607187;
+    }
+
+    .course-actions .btn {
+      font-size: 11px;
+      padding: 7px 5px;
+      border-radius: 4px;
+    }
+
+    .category-section {
+      background: #eaf1f9;
+      border-top: 1px solid #dce6f0;
+      border-bottom: 1px solid #dce6f0;
+    }
+
+    .category-card {
+      background: white;
+      border: 1px solid #dfe6ef;
+      border-radius: 4px;
+      text-align: center;
+      padding: 15px 5px 12px;
+      height: 100%;
+      color: #23405d;
+    }
+
+    .category-card .emoji {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .category-card strong {
+      font-size: 12px;
+    }
+
+    .why-card {
+      background: #fff;
+      border: 1px solid #e0e7ef;
+      border-radius: 4px;
+      padding: 15px;
+      display: flex;
+      gap: 12px;
+      height: 100%;
+      align-items: center;
+    }
+
+    .why-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 7px;
+      background: #e6f0fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .why-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 4px;
+    }
+
+    .why-card p {
+      font-size: 11px;
+      color: #68798b;
+      margin: 0;
+    }
+
+    .testimonial {
+      background: white;
+      border: 1px solid #dfe6ee;
+      border-radius: 5px;
+      padding: 17px;
+      height: 100%;
+      box-shadow: 0 2px 5px rgba(20,40,70,.04);
+    }
+
+    .testimonial h3 {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .stars {
+      color: #e9a51c;
+      letter-spacing: 1px;
+    }
+
+    .testimonial p {
+      font-size: 12px;
+      color: #607187;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .testimonial-label {
+      font-size: 10px;
+      color: #8492a3;
+      margin-bottom: 8px;
+    }
+
+    .join-section {
+      background: #12395e;
+      color: white;
+      text-align: center;
+      padding: 30px 0;
+      border-top: 5px solid #dbe7f3;
+      border-bottom: 5px solid #dbe7f3;
+    }
+
+    .join-section h2 {
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .join-section p {
+      font-size: 13px;
+      color: #d8e4f0;
+    }
+
+    .join-btn {
+      background: #ffca28;
+      border: 1px solid #e9b91d;
+      color: #18304b;
+      padding: 9px 30px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    footer {
+      background: #102c4b;
+      color: #d8e4f0;
+      padding: 17px 0;
+      font-size: 12px;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 767px) {
+      .hero { padding: 28px 0 15px; }
+      .hero-art { min-height: 220px; margin-top: 20px; }
+      .stat { border-right: 0; padding: 7px 0; }
+      .course-img { height: 145px; }
+      .section { padding: 20px 0; }
+      .course-actions {
+        flex-direction: column;
+      }
+      .course-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">
+      <span class="brand-icon">🎓</span>LEARNHUB
+    </a>
+
+    <button class="navbar-toggler" type="button"
+      data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="courses.html">Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#about">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#popular">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="contact.html">Contact</a>
+        </li>
+      </ul>
+
+      <div class="nav-buttons d-flex gap-2">
+        <a href="login.html" class="btn btn-outline-light">Login</a>
+        <a href="register.html" class="btn btn-primary">Register</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1>The Best Online Learning Platform</h1>
+        <p>
+          Learn new skills to advance your knowledge
+          with simple and practical courses.
+        </p>
+
+        <form class="search-box" onsubmit="searchCourses(event)">
+          <input id="courseSearch" type="search"
+                 placeholder="Search for courses..."
+                 aria-label="Search for courses">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="hero-art">
+          <div class="art-circle"></div>
+          <div class="art-board"></div>
+          <div class="art-laptop"></div>
+          <div class="art-person">
+            <div class="person-hair"></div>
+            <div class="person-head"></div>
+            <div class="person-body"></div>
+          </div>
+          <div class="float-card float-one">▤</div>
+          <div class="float-card float-two">▶</div>
+          <div class="float-card float-three">✦</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="container">
+    <div class="row">
+      <div class="col-4">
+        <div class="stat">
+          <span class="stat-icon">🎓</span>
+          <div>
+            <strong>6</strong>
+            <small>Online Courses</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="stat">
+          <span class="stat-icon">📘</span>
+          <div>
+            <strong>Learn</strong>
+            <small>At Your Own Pace</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="stat">
+          <span class="stat-icon">📈</span>
+          <div>
+            <strong>Track</strong>
+            <small>Your Progress</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POPULAR COURSES -->
+<section class="section" id="popular">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="section-heading">Popular Courses</h2>
+      <a href="courses.html" class="view-all">View All Courses ›</a>
+    </div>
+
+    <div class="row g-3">
+
+      <!-- WEB DEVELOPMENT -->
+      <div class="col-6 col-lg-3">
+        <div class="course-card">
+          <img class="course-img"
+            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+            alt="Web development workspace">
+
+          <div class="course-body">
+            <h3>Web Development</h3>
+            <p>Learn HTML, CSS and Bootstrap.</p>
+
+            <div class="course-meta">
+              <span>🔒 5 Lessons</span>
+              <span>Beginner</span>
+            </div>
+
+            <div class="course-actions d-flex gap-2 mt-3">
+              <a href="course-details.html?course=web"
+                 class="btn btn-outline-primary flex-fill">
+                View Course
+              </a>
+              <a href="courses.html"
+                 class="btn btn-primary flex-fill">
+                Enroll
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PYTHON PROGRAMMING -->
+      <div class="col-6 col-lg-3">
+        <div class="course-card">
+          <img class="course-img"
+            src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4"
+            alt="Python programming code">
+
+          <div class="course-body">
+            <h3>Python Programming</h3>
+            <p>Start learning Python basics.</p>
+
+            <div class="course-meta">
+              <span>🔒 6 Lessons</span>
+              <span>Beginner</span>
+            </div>
+
+            <div class="course-actions d-flex gap-2 mt-3">
+              <a href="course-details.html?course=python"
+                 class="btn btn-outline-primary flex-fill">
+                View Course
+              </a>
+              <a href="courses.html"
+                 class="btn btn-primary flex-fill">
+                Enroll
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATABASE FUNDAMENTALS -->
+      <div class="col-6 col-lg-3">
+        <div class="course-card">
+          <img class="course-img"
+            src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb"
+            alt="Database and programming">
+
+          <div class="course-body">
+            <h3>Database Fundamentals</h3>
+            <p>Learn tables, databases and SQL.</p>
+
+            <div class="course-meta">
+              <span>🔒 5 Lessons</span>
+              <span>Beginner</span>
+            </div>
+
+            <div class="course-actions d-flex gap-2 mt-3">
+              <a href="course-details.html?course=database"
+                 class="btn btn-outline-primary flex-fill">
+                View Course
+              </a>
+              <a href="courses.html"
+                 class="btn btn-primary flex-fill">
+                Enroll
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATA ANALYSIS -->
+      <div class="col-6 col-lg-3">
+        <div class="course-card">
+          <img class="course-img"
+            src="https://images.unsplash.com/photo-1551288049-bebda4e38f71"
+            alt="Data analysis charts">
+
+          <div class="course-body">
+            <h3>Data Analysis</h3>
+            <p>Explore data and basic statistics.</p>
+
+            <div class="course-meta">
+              <span>🔒 5 Lessons</span>
+              <span>Beginner</span>
+            </div>
+
+            <div class="course-actions d-flex gap-2 mt-3">
+              <a href="course-details.html?course=data"
+                 class="btn btn-outline-primary flex-fill">
+                View Course
+              </a>
+              <a href="courses.html"
+                 class="btn btn-primary flex-fill">
+                Enroll
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section category-section">
+  <div class="container">
+    <h2 class="section-heading">Explore Categories</h2>
+
+    <div class="row g-2">
+      <div class="col-4 col-md-2">
+        <div class="category-card">
+          <span class="emoji">💻</span>
+          <strong>Development</strong>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-2">
+        <div class="category-card">
+          <span class="emoji">🗄️</span>
+          <strong>Database</strong>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-2">
+        <div class="category-card">
+          <span class="emoji">🎨</span>
+          <strong>Design</strong>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-2">
+        <div class="category-card">
+          <span class="emoji">📊</span>
+          <strong>Data Science</strong>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-2">
+        <div class="category-card">
+          <span class="emoji">🔐</span>
+          <strong>Cybersecurity</strong>
+        </div>
+      </div>
+
+      <div class="col-4 col-md-2">
+        <div class="category-card">
+          <span class="emoji">🐍</span>
+          <strong>Programming</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section" id="about">
+  <div class="container">
+    <h2 class="section-heading text-center">Why Choose LearnHub?</h2>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="why-card">
+          <div class="why-icon">📘</div>
+          <div>
+            <h3>Structured Lessons</h3>
+            <p>Learn through organized course topics.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="why-card">
+          <div class="why-icon">💻</div>
+          <div>
+            <h3>Flexible Learning</h3>
+            <p>Study at your own pace and schedule.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="why-card">
+          <div class="why-icon">📈</div>
+          <div>
+            <h3>Track Your Progress</h3>
+            <p>See your completed lessons and progress.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEARNING EXPERIENCE -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-heading text-center">Learning at LearnHub</h2>
+    <p class="text-center text-muted small mb-3">
+      A simple learning experience designed for beginners.
+    </p>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="testimonial">
+          <div class="testimonial-label">LEARNING EXPERIENCE</div>
+          <h3>
+            Clear and Organized Lessons
+            <span class="stars">★★★★★</span>
+          </h3>
+          <p>
+            Follow lessons step by step and practice
+            new concepts as you learn.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="testimonial">
+          <div class="testimonial-label">LEARNING EXPERIENCE</div>
+          <h3>
+            Learn at Your Own Pace
+            <span class="stars">★★★★★</span>
+          </h3>
+          <p>
+            Continue learning when it suits you and
+            keep track of your course progress.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN COMMUNITY -->
+<section class="join-section">
+  <div class="container">
+    <h2>Join Our Community of Learners!</h2>
+    <p>Sign up today and start your journey to success.</p>
+    <a href="register.html" class="btn join-btn">
+      Get Started Now
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container d-flex flex-wrap justify-content-between gap-2">
+    <span>© 2026 LearnHub. All Rights Reserved.</span>
+    <span>
+      <a href="index.html">Home</a> ·
+      <a href="courses.html">Courses</a> ·
+      <a href="contact.html">Contact</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  function searchCourses(event) {
+    event.preventDefault();
+
+    const value = document.getElementById("courseSearch").value.trim();
+
+    if (value === "") {
+      window.location.href = "courses.html";
+    } else {
+      window.location.href =
+        "courses.html?search=" + encodeURIComponent(value);
+    }
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

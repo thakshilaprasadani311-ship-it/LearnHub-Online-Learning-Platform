@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details - LearnHub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f5f7fb;
+        }
+
+        .course-header {
+            background: linear-gradient(135deg, #0d6efd, #6610f2);
+            color: white;
+            border-radius: 15px;
+        }
+
+        .detail-card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        .course-icon {
+            font-size: 65px;
+        }
+
+        .lesson-row {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVIGATION BAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">
+            LearnHub
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="courses.html">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard.html">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- MAIN CONTENT -->
+<div class="container py-5">
+
+    <!-- BACK BUTTON -->
+    <div class="mb-4">
+        <a href="courses.html" class="btn btn-outline-primary">
+            ← Back to Courses
+        </a>
+    </div>
+
+    <!-- COURSE HEADER -->
+    <div class="course-header p-4 p-md-5 mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <span class="badge bg-light text-primary mb-3"
+                      id="courseLevel">
+                    Beginner
+                </span>
+
+                <h1 class="fw-bold" id="courseTitle">
+                    Course Name
+                </h1>
+
+                <p class="lead mb-3" id="courseDescription">
+                    Course description
+                </p>
+
+                <p class="mb-0">
+                    <strong>Duration:</strong>
+                    <span id="courseDuration"></span>
+                </p>
+            </div>
+
+            <div class="col-md-4 text-center mt-4 mt-md-0">
+                <div class="course-icon" id="courseIcon">📚</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- COURSE INFORMATION -->
+    <div class="row g-4">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-8">
+
+            <div class="card detail-card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-3">
+                        About This Course
+                    </h3>
+
+                    <p id="courseAbout" class="text-muted">
+                        Course information will appear here.
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="card detail-card shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-3">
+                        What You Will Learn
+                    </h3>
+
+                    <div id="learningOutcomes"></div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="col-lg-4">
+
+            <div class="card detail-card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-3">
+                        Course Lessons
+                    </h4>
+
+                    <div id="lessonList"></div>
+
+                    <hr>
+
+                    <div id="enrollmentStatus"
+                         class="mb-3"></div>
+
+                    <div class="d-grid gap-2">
+                        <a href="#" id="startButton"
+                           class="btn btn-primary">
+                            Start Learning
+                        </a>
+
+                        <a href="courses.html"
+                           class="btn btn-outline-secondary">
+                            Browse Other Courses
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FOOTER -->
+<footer class="bg-dark text-white text-center py-3">
+    <p class="mb-0">
+        © 2026 LearnHub. All Rights Reserved.
+    </p>
+</footer>
+
+
+<!-- JAVASCRIPT -->
+<script>
+
+// COURSE DATA
+const courses = {
+    web: {
+        id: "web",
+        name: "Web Development",
+        icon: "💻",
+        level: "Beginner",
+        duration: "5 Lessons",
+        description:
+            "Learn HTML, CSS, Bootstrap and responsive web design. Build your first website.",
+        about:
+            "This course introduces you to the fundamentals of creating websites. You will learn how web pages are structured with HTML, styled with CSS, and improved using Bootstrap. You will also explore responsive web design.",
+        outcomes: [
+            "Understand the basics of web development",
+            "Create web pages using HTML",
+            "Style web pages using CSS",
+            "Use Bootstrap components",
+            "Understand responsive web design"
+        ],
+        lessons: [
+            "Introduction to Web Development",
+            "HTML Basics",
+            "CSS Styling",
+            "Bootstrap",
+            "Responsive Web Design"
+        ]
+    },
+
+    python: {
+        id: "python",
+        name: "Python Programming",
+        icon: "🐍",
+        level: "Beginner",
+        duration: "6 Lessons",
+        description:
+            "Start coding with Python and understand variables, conditions and loops.",
+        about:
+            "This course introduces Python programming for beginners. You will learn how to write simple programs, use variables, make decisions with conditions, and repeat tasks using loops.",
+        outcomes: [
+            "Understand Python programming basics",
+            "Use variables and data types",
+            "Work with input and output",
+            "Use if and else conditions",
+            "Write loops",
+            "Create simple Python programs"
+        ],
+        lessons: [
+            "Introduction to Python",
+            "Variables and Data Types",
+            "Input and Output",
+            "If and Else Conditions",
+            "Loops in Python",
+            "Simple Python Program"
+        ]
+    },
+
+    database: {
+        id: "database",
+        name: "Database Fundamentals",
+        icon: "🗄️",
+        level: "Intermediate",
+        duration: "5 Lessons",
+        description:
+            "Learn how databases work, create tables and practice basic SQL queries.",
+        about:
+            "This course explains how data is stored and organized in databases. You will explore tables, records, fields, and basic SQL commands used to manage information.",
+        outcomes: [
+            "Understand database concepts",
+            "Identify tables, rows and columns",
+            "Create tables",
+            "Use basic SQL queries",
+            "Understand how to update and delete data"
+        ],
+        lessons: [
+            "Introduction to Databases",
+            "Tables, Rows and Columns",
+            "Creating Tables with SQL",
+            "SELECT and INSERT",
+            "UPDATE and DELETE"
+        ]
+    },
+
+    uiux: {
+        id: "uiux",
+        name: "UI/UX Design",
+        icon: "🎨",
+        level: "Beginner",
+        duration: "4 Lessons",
+        description:
+            "Discover user interface design, user experience and wireframing.",
+        about:
+            "This course introduces the ideas behind designing digital products. You will explore user interface elements, user experience, basic design principles, and simple wireframes.",
+        outcomes: [
+            "Understand UI and UX",
+            "Recognize common interface elements",
+            "Learn basic design principles",
+            "Create a simple wireframe"
+        ],
+        lessons: [
+            "Introduction to UI and UX",
+            "Design Principles",
+            "Understanding Users",
+            "Wireframing Basics"
+        ]
+    },
+
+    data: {
+        id: "data",
+        name: "Data Analysis",
+        icon: "📊",
+        level: "Intermediate",
+        duration: "5 Lessons",
+        description:
+            "Learn to understand data, work with spreadsheets and discover insights.",
+        about:
+            "This course introduces the process of exploring and understanding data. You will learn about data types, organizing information, simple calculations, and presenting findings.",
+        outcomes: [
+            "Understand basic data analysis",
+            "Recognize different data types",
+            "Organize data in tables",
+            "Use simple spreadsheet calculations",
+            "Present basic findings"
+        ],
+        lessons: [
+            "Introduction to Data Analysis",
+            "Types of Data",
+            "Organizing Data",
+            "Basic Calculations",
+            "Presenting Data"
+        ]
+    },
+
+    cyber: {
+        id: "cyber",
+        name: "Cybersecurity Basics",
+        icon: "🔐",
+        level: "Beginner",
+        duration: "4 Lessons",
+        description:
+            "Understand online safety, passwords, cyber threats and security basics.",
+        about:
+            "This course introduces basic cybersecurity concepts and safe online habits. You will learn about passwords, common threats, personal information, and ways to protect accounts.",
+        outcomes: [
+            "Understand cybersecurity basics",
+            "Recognize common cyber threats",
+            "Learn about strong passwords",
+            "Practice safe online habits"
+        ],
+        lessons: [
+            "Introduction to Cybersecurity",
+            "Passwords and Account Safety",
+            "Common Cyber Threats",
+            "Safe Internet Practices"
+        ]
+    }
+};
+
+
+// GET COURSE ID FROM URL
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("course");
+const course = courses[courseId];
+
+
+// HANDLE INVALID COURSE LINK
+if (!course) {
+    document.querySelector(".container.py-5").innerHTML = `
+        <div class="text-center py-5">
+            <h1 class="fw-bold">Course Not Found</h1>
+            <p class="text-muted">
+                Please select a course from our course list.
+            </p>
+            <a href="courses.html" class="btn btn-primary">
+                Browse Courses
+            </a>
+        </div>
+    `;
+} else {
+
+    // SHOW COURSE INFORMATION
+    document.title = course.name + " - LearnHub";
+
+    document.getElementById("courseTitle").textContent =
+        course.name;
+
+    document.getElementById("courseDescription").textContent =
+        course.description;
+
+    document.getElementById("courseAbout").textContent =
+        course.about;
+
+    document.getElementById("courseIcon").textContent =
+        course.icon;
+
+    document.getElementById("courseLevel").textContent =
+        course.level;
+
+    document.getElementById("courseDuration").textContent =
+        course.duration;
+
+
+    // SHOW LEARNING OUTCOMES
+    const outcomes = document.getElementById("learningOutcomes");
+
+    course.outcomes.forEach(function(outcome) {
+        const item = document.createElement("p");
+        item.className = "mb-2";
+        item.textContent = "✓ " + outcome;
+        outcomes.appendChild(item);
+    });
+
+
+    // SHOW LESSON LIST
+    const lessonList = document.getElementById("lessonList");
+
+    course.lessons.forEach(function(lesson, index) {
+        const item = document.createElement("div");
+        item.className = "lesson-row";
+        item.textContent =
+            (index + 1) + ". " + lesson;
+        lessonList.appendChild(item);
+    });
+
+
+    // CHECK LOGIN
+    const currentUser = JSON.parse(
+        localStorage.getItem("learnhubCurrentUser") || "null"
+    );
+
+
+    // CHECK ENROLLMENT
+    const enrollments = JSON.parse(
+        localStorage.getItem("learnhubEnrolledCourses") || "[]"
+    );
+
+    const isEnrolled = currentUser && enrollments.some(function(item) {
+        return item.email.toLowerCase() ===
+                   currentUser.email.toLowerCase() &&
+               item.courseId === course.id;
+    });
+
+
+    // SHOW ENROLLMENT STATUS AND START BUTTON
+    const status = document.getElementById("enrollmentStatus");
+    const startButton = document.getElementById("startButton");
+
+    if (isEnrolled) {
+        status.innerHTML = `
+            <div class="alert alert-success">
+                <strong>Enrolled ✓</strong><br>
+                You are enrolled in this course.
+            </div>
+        `;
+
+        startButton.href =
+            "lesson.html?course=" + encodeURIComponent(course.id);
+
+        startButton.textContent = "Start Learning";
+        startButton.classList.remove("disabled");
+
+    } else if (!currentUser) {
+        status.innerHTML = `
+            <div class="alert alert-warning">
+                Please login and enroll to start this course.
+            </div>
+        `;
+
+        startButton.href = "login.html";
+        startButton.textContent = "Login to Continue";
+
+    } else {
+        status.innerHTML = `
+            <div class="alert alert-warning">
+                You have not enrolled in this course yet.
+            </div>
+        `;
+
+        startButton.href = "courses.html";
+        startButton.textContent = "Enroll in Courses";
+    }
+}
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
